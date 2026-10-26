@@ -19,123 +19,137 @@
 
   <main class="bancada">
     <form class="painel" id="config" novalidate>
+      <div class="painel__conteudo">
 
-      <section class="grupo">
-        <h2 class="grupo__titulo">Arquivo</h2>
-        <label class="soltar" id="soltar">
-          <input class="soltar__input" type="file" accept="application/pdf,.pdf" id="arquivo">
-          <span class="soltar__vazio">
-            <strong>Arraste um PDF para cá</strong> ou clique para escolher
-          </span>
-          <span class="soltar__cheio" hidden>
-            <strong class="soltar__nome" id="arquivo-nome"></strong>
-            <span id="arquivo-info"></span>
-            <span class="soltar__trocar">Trocar arquivo</span>
-          </span>
-        </label>
-        <p class="ajuda">O arquivo é processado no seu navegador e não é enviado para nenhum servidor.</p>
-        <p class="erro" id="arquivo-erro" role="alert" hidden></p>
-      </section>
-
-      <section class="grupo">
-        <h2 class="grupo__titulo">Papel e impressora</h2>
-        <div class="campo">
-          <label class="campo__rotulo" for="papel">Tamanho do papel</label>
-          <select class="controle" id="papel" name="paper"></select>
-        </div>
-        <div class="campo campo--duplo" id="papel-personalizado" hidden>
-          <div>
-            <label class="campo__rotulo" for="papel-largura">Largura (mm)</label>
-            <input class="controle" id="papel-largura" name="customW" type="number" min="20" max="3000" step="0.1" value="210">
-          </div>
-          <div>
-            <label class="campo__rotulo" for="papel-altura">Altura (mm)</label>
-            <input class="controle" id="papel-altura" name="customH" type="number" min="20" max="3000" step="0.1" value="297">
-          </div>
-        </div>
-        <div class="campo">
-          <label class="campo__rotulo" for="impressao">Impressão</label>
-          <select class="controle" id="impressao" name="duplex">
-            <option value="true">Frente e verso automático</option>
-            <option value="false">Só frente (virar o papel à mão)</option>
-          </select>
-        </div>
-        <label class="marcar">
-          <input type="checkbox" name="alternateRotation">
-          <span>Girar o verso em 180°</span>
-        </label>
-        <p class="ajuda">Use se os versos saírem de cabeça para baixo no seu teste de impressão.</p>
-      </section>
-
-      <section class="grupo">
-        <h2 class="grupo__titulo">Páginas</h2>
-        <div class="campo">
-          <label class="campo__rotulo" for="por-lado">Páginas por lado da folha</label>
-          <select class="controle" id="por-lado" name="pagesPerSide">
-            <option value="2">2 (uma dupla)</option>
-            <option value="4">4 (duas duplas)</option>
-            <option value="6">6 (três duplas)</option>
-            <option value="8">8 (quatro duplas)</option>
-          </select>
-          <p class="ajuda">Com mais de uma dupla por lado, você corta a folha depois de imprimir.</p>
-        </div>
-        <label class="marcar">
-          <input type="checkbox" name="scale" checked>
-          <span>Ajustar as páginas ao papel</span>
-        </label>
-        <p class="ajuda">Desmarcado, as páginas mantêm o tamanho original.</p>
-
-        <div class="campo campo--espaco">
-          <label class="campo__rotulo" for="espaco">Espaço central</label>
-          <div class="espaco">
-            <input class="espaco__faixa" id="espaco" type="range" min="0" max="50" step="0.5" value="0" aria-describedby="espaco-ajuda">
-            <span class="espaco__valor">
-              <input class="controle espaco__numero" id="espaco-numero" name="gutter" type="number" min="0" max="50" step="0.5" value="0" aria-label="Espaço central em milímetros">
-              <span>mm</span>
+        <section class="grupo">
+          <h2 class="grupo__titulo">Arquivo</h2>
+          <label class="soltar" id="soltar">
+            <input class="soltar__input" type="file" accept="application/pdf,.pdf" id="arquivo">
+            <span class="soltar__vazio"><strong>Arraste um PDF</strong> ou clique para escolher</span>
+            <span class="soltar__cheio" hidden>
+              <strong class="soltar__nome" id="arquivo-nome"></strong>
+              <span><span id="arquivo-info"></span>. <span class="soltar__trocar">Trocar</span></span>
             </span>
+          </label>
+          <p class="ajuda">Processado no seu navegador. Nada é enviado para servidores.</p>
+          <p class="erro" id="arquivo-erro" role="alert" hidden></p>
+        </section>
+
+        <section class="grupo">
+          <h2 class="grupo__titulo">Papel e impressora</h2>
+          <div class="campo">
+            <label class="campo__rotulo" for="papel">Tamanho do papel</label>
+            <select class="controle" id="papel" name="paper"></select>
           </div>
-          <p class="ajuda" id="espaco-ajuda">Afasta ou aproxima as duas páginas de cada dupla, a partir da dobra.</p>
-        </div>
-      </section>
+          <div class="campo campo--duplo" id="papel-personalizado" hidden>
+            <div>
+              <label class="campo__rotulo" for="papel-largura">Largura (mm)</label>
+              <input class="controle" id="papel-largura" name="customW" type="number" min="20" max="3000" step="0.1" value="210">
+            </div>
+            <div>
+              <label class="campo__rotulo" for="papel-altura">Altura (mm)</label>
+              <input class="controle" id="papel-altura" name="customH" type="number" min="20" max="3000" step="0.1" value="297">
+            </div>
+          </div>
+          <div class="campo">
+            <label class="campo__rotulo" for="impressao">Impressão</label>
+            <select class="controle" id="impressao" name="duplex">
+              <option value="true">Frente e verso automático</option>
+              <option value="false">Só frente (virar o papel à mão)</option>
+            </select>
+          </div>
+          <label class="marcar" title="Use se os versos saírem de cabeça para baixo no teste de impressão.">
+            <input type="checkbox" name="alternateRotation">
+            <span>Girar o verso em 180°</span>
+          </label>
+        </section>
 
-      <section class="grupo">
-        <h2 class="grupo__titulo">Cadernos</h2>
-        <label class="marcar">
-          <input type="checkbox" name="booklet">
-          <span>Livreto único</span>
-        </label>
-        <p class="ajuda">Todas as folhas num só caderno, para grampear na dobra.</p>
-        <div class="campo">
-          <label class="campo__rotulo" for="folhas">Folhas por caderno</label>
-          <input class="controle controle--curto" id="folhas" name="sheetsPerSignature" type="number" min="1" max="64" step="1" value="4">
-          <p class="ajuda">4 folhas (16 páginas) é o mais comum para costura. Se a conta não fechar, as folhas são distribuídas entre os cadernos.</p>
-        </div>
-      </section>
+        <section class="grupo">
+          <h2 class="grupo__titulo">Páginas</h2>
+          <div class="campo">
+            <label class="campo__rotulo" for="por-lado">Páginas por lado da folha</label>
+            <select class="controle" id="por-lado" name="pagesPerSide">
+              <option value="2">2 (uma dupla)</option>
+              <option value="4">4 (duas duplas, cortar depois)</option>
+              <option value="6">6 (três duplas, cortar depois)</option>
+              <option value="8">8 (quatro duplas, cortar depois)</option>
+            </select>
+          </div>
+          <label class="marcar" title="Desmarcado, as páginas mantêm o tamanho original.">
+            <input type="checkbox" name="scale" checked>
+            <span>Ajustar as páginas ao papel</span>
+          </label>
+        </section>
 
-      <section class="grupo">
-        <h2 class="grupo__titulo">Outros</h2>
-        <label class="marcar">
-          <input type="checkbox" name="rightToLeft">
-          <span>Leitura da direita para a esquerda</span>
-        </label>
-        <p class="ajuda">Para mangá e textos em árabe ou hebraico.</p>
-        <label class="marcar">
-          <input type="checkbox" name="debug">
-          <span>Modo de conferência</span>
-        </label>
-        <p class="ajuda">Imprime caderno, folha, lado e número da página em cada posição.</p>
-      </section>
+        <section class="grupo">
+          <h2 class="grupo__titulo">Cadernos</h2>
+          <label class="marcar" title="Todas as folhas num só caderno, para grampear na dobra.">
+            <input type="checkbox" name="booklet">
+            <span>Livreto único (grampeado)</span>
+          </label>
+          <div class="campo campo--linha">
+            <label class="campo__rotulo" for="folhas">Folhas por caderno</label>
+            <input class="controle controle--curto" id="folhas" name="sheetsPerSignature" type="number" min="1" max="64" step="1" value="4">
+          </div>
+          <p class="ajuda">4 folhas (16 páginas) é o mais comum para costura.</p>
+        </section>
 
-      <button class="botao botao--primario" type="submit" id="gerar" disabled>Gerar PDF</button>
+        <section class="grupo grupo--ultimo">
+          <h2 class="grupo__titulo">Outros</h2>
+          <label class="marcar" title="Para mangá e textos em árabe ou hebraico.">
+            <input type="checkbox" name="rightToLeft">
+            <span>Leitura da direita para a esquerda</span>
+          </label>
+          <label class="marcar" title="Imprime caderno, folha, lado e número da página em cada posição.">
+            <input type="checkbox" name="debug">
+            <span>Modo de conferência (numerar posições)</span>
+          </label>
+        </section>
+      </div>
+
+      <div class="painel__acoes">
+        <div class="resultado" id="resultado" hidden></div>
+        <button class="botao botao--primario" type="submit" id="gerar" disabled>Gerar PDF</button>
+      </div>
     </form>
 
     <section class="mesa" aria-label="Pré-visualização">
-      <div class="mesa__barra">
-        <button class="botao botao--mesa" type="button" id="folha-anterior" aria-label="Folha anterior">‹</button>
-        <p class="mesa__contagem" id="folha-contagem" aria-live="polite"></p>
-        <button class="botao botao--mesa" type="button" id="folha-proxima" aria-label="Próxima folha">›</button>
+      <div class="ferramentas">
+        <div class="navegar">
+          <button class="botao botao--icone" type="button" id="folha-anterior" aria-label="Folha anterior">‹</button>
+          <p class="navegar__contagem" id="folha-contagem" aria-live="polite"></p>
+          <button class="botao botao--icone" type="button" id="folha-proxima" aria-label="Próxima folha">›</button>
+        </div>
+
+        <div class="ajuste ajuste--espaco">
+          <label class="ajuste__rotulo" for="espaco">Espaço central</label>
+          <button class="botao botao--icone" type="button" data-passo="-0.5" aria-label="Aproximar as páginas">−</button>
+          <input class="ajuste__faixa" id="espaco" form="config" type="range" min="-30" max="50" step="0.5" value="0">
+          <button class="botao botao--icone" type="button" data-passo="0.5" aria-label="Afastar as páginas">+</button>
+          <input class="controle ajuste__numero" id="espaco-numero" form="config" name="gutter" type="number" min="-30" max="50" step="0.5" value="0" aria-label="Espaço central em milímetros">
+          <span class="ajuste__unidade">mm</span>
+        </div>
+
+        <div class="ajuste ajuste--corte">
+          <button class="botao botao--alternar" type="button" id="cortar" aria-pressed="false">Cortar margens</button>
+          <span class="ajuste__info" id="corte-resumo">sem corte</span>
+        </div>
       </div>
-      <div class="mesa__folhas">
+
+      <div class="corte" id="corte-painel" hidden>
+        <p class="corte__dica">Arraste as bordas azuis nas páginas ou digite os valores. O corte vale para todas as páginas.</p>
+        <div class="corte__campos">
+          <label class="corte__campo">Topo <input class="controle" form="config" name="cropTop" type="number" min="0" max="100" step="0.5" value="0"></label>
+          <label class="corte__campo">Base <input class="controle" form="config" name="cropBottom" type="number" min="0" max="100" step="0.5" value="0"></label>
+          <label class="corte__campo">Lado da dobra <input class="controle" form="config" name="cropInner" type="number" min="0" max="100" step="0.5" value="0"></label>
+          <label class="corte__campo">Lado de fora <input class="controle" form="config" name="cropOuter" type="number" min="0" max="100" step="0.5" value="0"></label>
+          <span class="corte__unidade">mm</span>
+          <button class="botao botao--secundario" type="button" id="corte-zerar">Zerar</button>
+          <button class="botao botao--primario" type="button" id="corte-concluir">Concluir</button>
+        </div>
+      </div>
+
+      <div class="mesa__folhas" id="folhas-area">
         <figure class="folha">
           <canvas class="folha__canvas" id="canvas-frente"></canvas>
           <figcaption>Frente</figcaption>
@@ -145,13 +159,15 @@
           <figcaption>Verso</figcaption>
         </figure>
       </div>
-      <p class="mesa__legenda">
-        <span class="legenda legenda--dobra">Dobra</span>
-        <span class="legenda legenda--corte">Corte</span>
-        <span class="legenda legenda--espaco">Espaço central</span>
-      </p>
-      <dl class="resumo" id="resumo"></dl>
-      <div class="resultado" id="resultado" hidden></div>
+
+      <div class="mesa__rodape">
+        <div class="resumo" id="resumo"></div>
+        <p class="legenda-grupo">
+          <span class="legenda legenda--dobra">Dobra</span>
+          <span class="legenda legenda--corte">Corte</span>
+          <span class="legenda legenda--espaco">Espaço central</span>
+        </p>
+      </div>
     </section>
   </main>
 
@@ -161,7 +177,8 @@
     <ol class="passos">
       <li>Escolha o PDF do seu livro, zine ou caderno.</li>
       <li>Defina o papel, o número de páginas por lado e o tamanho dos cadernos.</li>
-      <li>Ajuste o espaço central olhando o preview até as páginas ficarem onde você quer.</li>
+      <li>Se o PDF tiver margens sobrando, use "Cortar margens" e arraste as bordas no preview.</li>
+      <li>Ajuste o espaço central até as páginas ficarem onde você quer.</li>
       <li>Gere o PDF e imprima. Antes de imprimir tudo, teste com uma folha.</li>
       <li>Dobre cada folha ao meio, encaixe as folhas de cada caderno e costure ou grampeie.</li>
     </ol>
@@ -177,11 +194,11 @@
     </details>
     <details>
       <summary>Os versos saíram de cabeça para baixo. O que faço?</summary>
-      <p>Marque "Girar o verso em 180°" ou mude a opção da impressora entre virar pela borda longa e pela borda curta. O resumo ao lado do preview indica qual borda usar.</p>
+      <p>Marque "Girar o verso em 180°" ou mude a opção da impressora entre virar pela borda longa e pela borda curta. O resumo abaixo do preview indica qual borda usar.</p>
     </details>
     <details>
-      <summary>Para que serve o espaço central?</summary>
-      <p>Ele define a distância entre as duas páginas de cada dupla. Aumente para ganhar margem perto da costura, principalmente em livros grossos, onde o miolo "engole" parte do texto.</p>
+      <summary>Qual a diferença entre espaço central e cortar margens?</summary>
+      <p>O espaço central move as páginas: positivo afasta da dobra, negativo aproxima e esconde a parte que passa da dobra. Cortar margens remove faixas da própria página (topo, base, lado da dobra e lado de fora) e, com "Ajustar as páginas ao papel" ligado, a página cresce para ocupar o espaço liberado.</p>
     </details>
     <details>
       <summary>E se o número de páginas não fechar com os cadernos?</summary>

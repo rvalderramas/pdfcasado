@@ -12,7 +12,6 @@ export function hideResult(root) {
 export function showResult(root, bytes, sourceName, plan, { duplex }) {
   hideResult(root);
   currentUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-  const fileName = `${sourceName.replace(/\.pdf$/i, '')}-casado.pdf`;
   const sheets = plan.sheets.length;
 
   const steps = duplex
@@ -26,20 +25,19 @@ export function showResult(root, bytes, sourceName, plan, { duplex }) {
   steps.push('Dobre cada folha ao meio, encaixe as folhas de cada caderno, uma dentro da outra, e empilhe os cadernos em ordem.');
 
   root.innerHTML = `
-    <div class="resultado__topo">
-      <p class="resultado__titulo">PDF pronto</p>
-      <a class="botao botao--primario" download></a>
-    </div>
-    <ol class="resultado__passos"></ol>`;
+    <a class="botao botao--primario resultado__baixar"></a>
+    <details class="resultado__instrucoes">
+      <summary>Como imprimir e montar</summary>
+      <ol></ol>
+    </details>`;
   const link = root.querySelector('a');
   link.href = currentUrl;
-  link.download = fileName;
-  link.textContent = 'Baixar PDF';
+  link.download = `${sourceName.replace(/\.pdf$/i, '')}-casado.pdf`;
+  link.textContent = 'Baixar PDF pronto';
   root.querySelector('ol').append(...steps.map((s) => {
     const li = document.createElement('li');
     li.textContent = s;
     return li;
   }));
   root.hidden = false;
-  root.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }

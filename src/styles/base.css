@@ -30,43 +30,61 @@ a { color: inherit; }
 /* Cabeçalho */
 .topo {
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--esp-2) var(--esp-5);
-  padding: var(--esp-4) var(--esp-5);
+  align-items: center;
+  gap: var(--esp-5);
+  height: var(--topo-altura);
+  padding: 0 var(--esp-5);
   border-bottom: 1px solid var(--cor-borda);
 }
 .marca {
   font-family: var(--fonte-titulo);
-  font-size: var(--texto-gg);
+  font-size: var(--texto-g);
   text-decoration: none;
+  white-space: nowrap;
 }
 .topo__frase {
   margin: 0;
-  color: var(--cor-tinta-suave);
   flex: 1;
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-p);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.topo__link { font-size: var(--texto-p); }
+.topo__link { font-size: var(--texto-p); white-space: nowrap; }
 
-/* Bancada: painel de opções à esquerda, mesa de corte à direita */
+/* Bancada: ocupa a tela inteira abaixo do cabeçalho.
+   Painel de opções à esquerda (rola sozinho), mesa de corte à direita. */
 .bancada {
   display: grid;
   grid-template-columns: var(--painel-largura) 1fr;
-  align-items: start;
+  height: calc(100dvh - var(--topo-altura));
 }
 
 .painel {
-  padding: var(--esp-5);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   border-right: 1px solid var(--cor-borda);
+}
+.painel__conteudo {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--esp-4) var(--esp-5);
+}
+.painel__acoes {
+  padding: var(--esp-4) var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+  background: var(--cor-fundo);
 }
 
 .mesa {
-  position: sticky;
-  top: 0;
-  max-height: 100vh;
-  min-height: 100vh;
-  overflow-y: auto;
-  padding: var(--esp-5) var(--esp-6) var(--esp-6);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--esp-4) var(--esp-5);
+  gap: var(--esp-4);
   color: var(--cor-mesa-texto);
   background-color: var(--cor-mesa);
   background-image:
@@ -77,7 +95,7 @@ a { color: inherit; }
   background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
 }
 
-/* Seção explicativa */
+/* Seção explicativa, abaixo da bancada */
 .sobre {
   max-width: 68ch;
   margin: 0 auto;
@@ -95,9 +113,13 @@ a { color: inherit; }
 }
 
 @media (max-width: 860px) {
-  .bancada { grid-template-columns: 1fr; }
+  .topo { height: auto; padding: var(--esp-3) var(--esp-4); flex-wrap: wrap; gap: var(--esp-1) var(--esp-4); }
+  .topo__frase { flex-basis: 100%; order: 3; white-space: normal; }
+  .bancada { grid-template-columns: 1fr; height: auto; }
   .painel { border-right: 0; }
-  .mesa { position: static; max-height: none; min-height: 0; padding: var(--esp-5) var(--esp-4); }
+  .painel__conteudo { overflow: visible; }
+  .painel__acoes { position: sticky; bottom: 0; z-index: 2; }
+  .mesa { padding: var(--esp-4); }
 }
 
 @media (prefers-reduced-motion: reduce) {

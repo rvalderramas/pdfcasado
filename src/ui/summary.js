@@ -14,28 +14,32 @@ export function renderSummary(root, plan, { demo, duplex }) {
   const rows = [];
 
   if (demo) {
-    rows.push(['Exemplo', 'Livro de 16 páginas A5. Escolha um PDF para ver o seu.']);
+    rows.push(['Exemplo', '16 páginas A5. Escolha um PDF para ver o seu.']);
   } else {
     const blanks = plan.blankPages ? ` + ${plural(plan.blankPages, 'em branco', 'em branco')} no final` : '';
     rows.push(['Páginas', `${plan.pageCount}${blanks}`]);
   }
   rows.push(['Cadernos', describeSignatures(plan.signatureSizes)]);
-  rows.push(['Papel', `${plural(sheets, 'folha', 'folhas')}, ${plural(sheets * 2, 'página', 'páginas')} no PDF gerado`]);
-  if (plan.stacks > 1) rows.push(['Corte', `cada folha rende ${plan.stacks} pilhas`]);
+  rows.push(['Papel', plural(sheets, 'folha', 'folhas')]);
+  if (plan.stacks > 1) rows.push(['Pilhas após cortar', String(plan.stacks)]);
   rows.push([duplex ? 'Impressora' : 'Ao virar a pilha', `virar pela borda ${plan.flipEdge}`]);
 
-  root.replaceChildren(...rows.flatMap(([term, value]) => {
+  const list = document.createElement('dl');
+  list.append(...rows.map(([term, value]) => {
+    const row = document.createElement('div');
     const dt = document.createElement('dt');
     const dd = document.createElement('dd');
     dt.textContent = term;
     dd.textContent = value;
-    return [dt, dd];
+    row.append(dt, dd);
+    return row;
   }));
+  root.replaceChildren(list);
 
   if (plan.overflow) {
     const warn = document.createElement('p');
     warn.className = 'aviso';
-    warn.textContent = 'Algumas páginas passam da sua metade da folha e serão cortadas. Marque "Ajustar as páginas ao papel" ou diminua o espaço central.';
+    warn.textContent = 'Algumas páginas passam da borda e serão cortadas. Marque "Ajustar as páginas ao papel", corte as margens ou diminua o espaço central.';
     root.append(warn);
   }
 }

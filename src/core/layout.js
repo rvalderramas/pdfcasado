@@ -1,3 +1,5 @@
+import { sideInsets } from './crop.js';
+
 // Geometria da folha impressa. Coordenadas em pontos, origem no canto superior
 // esquerdo, y crescendo para baixo. Rotação em graus no sentido horário,
 // indicando para onde aponta o topo da página (0 = cima, 180 = baixo).
@@ -33,10 +35,18 @@ export function cellRects(grid) {
 }
 
 // Posiciona as duas páginas de uma dupla dentro de uma célula.
-// O espaço central (gutter) separa as páginas a partir da dobra.
-export function placeSpread(cell, pages, pageSizes, { gutter, scale }) {
+// O espaço central (gutter) é medido a partir da dobra: positivo afasta as
+// páginas, negativo aproxima (a parte que passa da dobra é cortada).
+// O corte (crop) remove margens da página original antes de ajustá-la.
+//
+// Cada página devolve:
+//   rect  área visível (já cortada) na folha
+//   full  página original inteira na mesma escala (o que é desenhado)
+//   clip  recorte aplicado ao desenho: área visível limitada à sua metade
+export function placeSpread(cell, pages, pageSizes, { gutter, scale, crop }) {
   const half = cell.w / 2;
-  const availW = Math.max(half - gutter / 2, 1);
+  const fold = cell.x + half;
+  const availW = Math.max(half - Math.max(gutter, 0) / 2, 1);
 
   return pages.map((page, side) => {
     const isLeft = side === 0;
@@ -44,18 +54,38 @@ export function placeSpread(cell, pages, pageSizes, { gutter, scale }) {
     if (page === null) return { page, side, rot: 0, slot, rect: null };
 
     const size = pageSizes[page];
-    const s = scale ? Math.min(availW / size.w, cell.h / size.h) : 1;
-    const w = size.w * s;
-    const h = size.h * s;
-    const fold = cell.x + half;
+    const ins = sideInsets(crop, side);
+    const visW = Math.max(size.w - ins.l - ins.r, size.w * 0.1);
+    const visH = Math.max(size.h - ins.t - ins.b, size.h * 0.1);
+    const s = scale ? Math.min(availW / visW, cell.h / visH) : 1;
+    const w = visW * s;
+    const h = visH * s;
+    const rect = { x: isLeft ? fold - gutter / 2 - w : fold + gutter / 2, y: cell.y + (cell.h - h) / 2, w, h };
+
     return {
       page,
       side,
       rot: 0,
+      scale: s,
       slot,
-      rect: { x: isLeft ? fold - gutter / 2 - w : fold + gutter / 2, y: cell.y + (cell.h - h) / 2, w, h },
+      rect,
+      full: { x: rect.x - ins.l * s, y: rect.y - ins.t * s, w: size.w * s, h: size.h * s },
+      clip: intersect(rect, slot),
+      // Passa da borda externa, de cima ou de baixo (a dobra não conta).
+      clipped: (isLeft ? rect.x < slot.x - 0.5 : rect.x + w > slot.x + slot.w + 0.5) || h > cell.h + 0.5,
     };
   });
+}
+
+function intersect(a, b) {
+  const x = Math.max(a.x, b.x);
+  const y = Math.max(a.y, b.y);
+  return {
+    x,
+    y,
+    w: Math.max(0, Math.min(a.x + a.w, b.x + b.w) - x),
+    h: Math.max(0, Math.min(a.y + a.h, b.y + b.h) - y),
+  };
 }
 
 export const foldLine = (cell) => ({ x1: cell.x + cell.w / 2, y1: cell.y, x2: cell.x + cell.w / 2, y2: cell.y + cell.h });
@@ -74,6 +104,8 @@ export function rotateSide180(side, W, H) {
       rot: (p.rot + 180) % 360,
       slot: rotRect(p.slot, W, H),
       rect: rotRect(p.rect, W, H),
+      full: rotRect(p.full, W, H),
+      clip: rotRect(p.clip, W, H),
     })),
   };
 }

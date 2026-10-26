@@ -1,7 +1,10 @@
 // Gera o PDF final a partir do plano de imposição, usando pdf-lib.
 // As páginas originais são copiadas como vetor, sem perda de qualidade.
 
-import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib';
+import {
+  PDFDocument, StandardFonts, degrees, rgb,
+  pushGraphicsState, popGraphicsState, rectangle, clip, endPath,
+} from 'pdf-lib';
 import { describePlacement } from '../core/labels.js';
 
 const GRAY = rgb(0.55, 0.55, 0.55);
@@ -41,10 +44,11 @@ export async function generatePdf(source, plan, { debug }) {
 function drawSourcePage(page, emb, srcPage, p, H) {
   const rot = (p.rot + normalize(srcPage.getRotation().angle)) % 360;
   const sideways = rot === 90 || rot === 270;
-  const w = sideways ? p.rect.h : p.rect.w;
-  const h = sideways ? p.rect.w : p.rect.h;
-  const x0 = p.rect.x;
-  const y0 = H - p.rect.y - p.rect.h;
+  const { full, clip: c } = p;
+  const w = sideways ? full.h : full.w;
+  const h = sideways ? full.w : full.h;
+  const x0 = full.x;
+  const y0 = H - full.y - full.h;
   // pdf-lib gira em torno do canto inferior esquerdo, no sentido anti-horário.
   const origin = {
     0: [x0, y0],
@@ -52,7 +56,10 @@ function drawSourcePage(page, emb, srcPage, p, H) {
     180: [x0 + w, y0 + h],
     270: [x0 + h, y0],
   }[rot];
+  // Recorta para mostrar só a área visível (margens cortadas e lado da dobra).
+  page.pushOperators(pushGraphicsState(), rectangle(c.x, H - c.y - c.h, c.w, c.h), clip(), endPath());
   page.drawPage(emb, { x: origin[0], y: origin[1], width: w, height: h, rotate: degrees(-rot) });
+  page.pushOperators(popGraphicsState());
 }
 
 function drawDebug(page, side, face, font, H) {

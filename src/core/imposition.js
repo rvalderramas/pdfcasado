@@ -14,7 +14,8 @@ export function buildPlan(pageSizes, settings) {
   const grid = chooseGrid(paper, pageSizes[0], spreadsPerSide);
   const { sheetW: W, sheetH: H } = grid;
   const cells = cellRects(grid);
-  const opts = { gutter, scale: settings.scale };
+  const crop = Object.fromEntries(Object.entries(settings.crop).map(([k, v]) => [k, mmToPt(v)]));
+  const opts = { gutter, scale: settings.scale, crop };
 
   // Cortar e empilhar: o fólio j vai para a folha j % n, na posição j / n.
   // Depois de cortar a resma, cada posição vira uma pilha já em ordem.
@@ -55,10 +56,8 @@ export function buildPlan(pageSizes, settings) {
   const landscape = W > H;
   const flipShortEdge = landscape !== settings.alternateRotation;
 
-  // Avisa quando alguma página sai da sua metade da dupla (cortada na impressão).
-  const inside = (r, s) => r.x >= s.x - 0.5 && r.y >= s.y - 0.5
-    && r.x + r.w <= s.x + s.w + 0.5 && r.y + r.h <= s.y + s.h + 0.5;
-  const overflow = sheets.some((s) => s.front.placements.some((p) => p.rect && !inside(p.rect, p.slot)));
+  // Avisa quando alguma página passa da borda da folha ou da sua metade.
+  const overflow = sheets.some((s) => s.front.placements.some((p) => p.clipped));
 
   return {
     sheetW: W,
