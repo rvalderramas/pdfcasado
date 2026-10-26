@@ -1,0 +1,105 @@
+/* Estilos de base e estrutura geral da página. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
+  font-family: var(--fonte-texto);
+  font-size: var(--texto-m);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--cor-dobra);
+  outline-offset: 2px;
+}
+
+[hidden] { display: none !important; }
+
+/* Cabeçalho */
+.topo {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--esp-2) var(--esp-5);
+  padding: var(--esp-4) var(--esp-5);
+  border-bottom: 1px solid var(--cor-borda);
+}
+.marca {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-gg);
+  text-decoration: none;
+}
+.topo__frase {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+  flex: 1;
+}
+.topo__link { font-size: var(--texto-p); }
+
+/* Bancada: painel de opções à esquerda, mesa de corte à direita */
+.bancada {
+  display: grid;
+  grid-template-columns: var(--painel-largura) 1fr;
+  align-items: start;
+}
+
+.painel {
+  padding: var(--esp-5);
+  border-right: 1px solid var(--cor-borda);
+}
+
+.mesa {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+  padding: var(--esp-5) var(--esp-6) var(--esp-6);
+  color: var(--cor-mesa-texto);
+  background-color: var(--cor-mesa);
+  background-image:
+    linear-gradient(var(--cor-mesa-linha-forte) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cor-mesa-linha-forte) 1px, transparent 1px),
+    linear-gradient(var(--cor-mesa-linha) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cor-mesa-linha) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* Seção explicativa */
+.sobre {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: var(--esp-7) var(--esp-5);
+}
+.sobre h2 { font-size: var(--texto-gg); margin: var(--esp-6) 0 var(--esp-3); }
+.sobre p, .sobre li { line-height: 1.6; }
+
+.rodape {
+  padding: var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-p);
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .bancada { grid-template-columns: 1fr; }
+  .painel { border-right: 0; }
+  .mesa { position: static; max-height: none; min-height: 0; padding: var(--esp-5) var(--esp-4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF Casado — imposição de PDF para encadernação</title>
+  <meta name="description" content="Transforme um PDF em cadernos prontos para imprimir, dobrar e costurar. Funciona no navegador, sem enviar seus arquivos para nenhum servidor.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Young+Serif&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="/">PDF Casado</a>
+    <p class="topo__frase">Transforme um PDF em cadernos prontos para imprimir, dobrar e costurar.</p>
+    <a class="topo__link" href="#como-funciona">Como funciona</a>
+  </header>
+
+  <main class="bancada">
+    <form class="painel" id="config" novalidate>
+
+      <section class="grupo">
+        <h2 class="grupo__titulo">Arquivo</h2>
+        <label class="soltar" id="soltar">
+          <input class="soltar__input" type="file" accept="application/pdf,.pdf" id="arquivo">
+          <span class="soltar__vazio">
+            <strong>Arraste um PDF para cá</strong> ou clique para escolher
+          </span>
+          <span class="soltar__cheio" hidden>
+            <strong class="soltar__nome" id="arquivo-nome"></strong>
+            <span id="arquivo-info"></span>
+            <span class="soltar__trocar">Trocar arquivo</span>
+          </span>
+        </label>
+        <p class="ajuda">O arquivo é processado no seu navegador e não é enviado para nenhum servidor.</p>
+        <p class="erro" id="arquivo-erro" role="alert" hidden></p>
+      </section>
+
+      <section class="grupo">
+        <h2 class="grupo__titulo">Papel e impressora</h2>
+        <div class="campo">
+          <label class="campo__rotulo" for="papel">Tamanho do papel</label>
+          <select class="controle" id="papel" name="paper"></select>
+        </div>
+        <div class="campo campo--duplo" id="papel-personalizado" hidden>
+          <div>
+            <label class="campo__rotulo" for="papel-largura">Largura (mm)</label>
+            <input class="controle" id="papel-largura" name="customW" type="number" min="20" max="3000" step="0.1" value="210">
+          </div>
+          <div>
+            <label class="campo__rotulo" for="papel-altura">Altura (mm)</label>
+            <input class="controle" id="papel-altura" name="customH" type="number" min="20" max="3000" step="0.1" value="297">
+          </div>
+        </div>
+        <div class="campo">
+          <label class="campo__rotulo" for="impressao">Impressão</label>
+          <select class="controle" id="impressao" name="duplex">
+            <option value="true">Frente e verso automático</option>
+            <option value="false">Só frente (virar o papel à mão)</option>
+          </select>
+        </div>
+        <label class="marcar">
+          <input type="checkbox" name="alternateRotation">
+          <span>Girar o verso em 180°</span>
+        </label>
+        <p class="ajuda">Use se os versos saírem de cabeça para baixo no seu teste de impressão.</p>
+      </section>
+
+      <section class="grupo">
+        <h2 class="grupo__titulo">Páginas</h2>
+        <div class="campo">
+          <label class="campo__rotulo" for="por-lado">Páginas por lado da folha</label>
+          <select class="controle" id="por-lado" name="pagesPerSide">
+            <option value="2">2 (uma dupla)</option>
+            <option value="4">4 (duas duplas)</option>
+            <option value="6">6 (três duplas)</option>
+            <option value="8">8 (quatro duplas)</option>
+          </select>
+          <p class="ajuda">Com mais de uma dupla por lado, você corta a folha depois de imprimir.</p>
+        </div>
+        <label class="marcar">
+          <input type="checkbox" name="scale" checked>
+          <span>Ajustar as páginas ao papel</span>
+        </label>
+        <p class="ajuda">Desmarcado, as páginas mantêm o tamanho original.</p>
+
+        <div class="campo campo--espaco">
+          <label class="campo__rotulo" for="espaco">Espaço central</label>
+          <div class="espaco">
+            <input class="espaco__faixa" id="espaco" type="range" min="0" max="50" step="0.5" value="0" aria-describedby="espaco-ajuda">
+            <span class="espaco__valor">
+              <input class="controle espaco__numero" id="espaco-numero" name="gutter" type="number" min="0" max="50" step="0.5" value="0" aria-label="Espaço central em milímetros">
+              <span>mm</span>
+            </span>
+          </div>
+          <p class="ajuda" id="espaco-ajuda">Afasta ou aproxima as duas páginas de cada dupla, a partir da dobra.</p>
+        </div>
+      </section>
+
+      <section class="grupo">
+        <h2 class="grupo__titulo">Cadernos</h2>
+        <label class="marcar">
+          <input type="checkbox" name="booklet">
+          <span>Livreto único</span>
+        </label>
+        <p class="ajuda">Todas as folhas num só caderno, para grampear na dobra.</p>
+        <div class="campo">
+          <label class="campo__rotulo" for="folhas">Folhas por caderno</label>
+          <input class="controle controle--curto" id="folhas" name="sheetsPerSignature" type="number" min="1" max="64" step="1" value="4">
+          <p class="ajuda">4 folhas (16 páginas) é o mais comum para costura. Se a conta não fechar, as folhas são distribuídas entre os cadernos.</p>
+        </div>
+      </section>
+
+      <section class="grupo">
+        <h2 class="grupo__titulo">Outros</h2>
+        <label class="marcar">
+          <input type="checkbox" name="rightToLeft">
+          <span>Leitura da direita para a esquerda</span>
+        </label>
+        <p class="ajuda">Para mangá e textos em árabe ou hebraico.</p>
+        <label class="marcar">
+          <input type="checkbox" name="debug">
+          <span>Modo de conferência</span>
+        </label>
+        <p class="ajuda">Imprime caderno, folha, lado e número da página em cada posição.</p>
+      </section>
+
+      <button class="botao botao--primario" type="submit" id="gerar" disabled>Gerar PDF</button>
+    </form>
+
+    <section class="mesa" aria-label="Pré-visualização">
+      <div class="mesa__barra">
+        <button class="botao botao--mesa" type="button" id="folha-anterior" aria-label="Folha anterior">‹</button>
+        <p class="mesa__contagem" id="folha-contagem" aria-live="polite"></p>
+        <button class="botao botao--mesa" type="button" id="folha-proxima" aria-label="Próxima folha">›</button>
+      </div>
+      <div class="mesa__folhas">
+        <figure class="folha">
+          <canvas class="folha__canvas" id="canvas-frente"></canvas>
+          <figcaption>Frente</figcaption>
+        </figure>
+        <figure class="folha">
+          <canvas class="folha__canvas" id="canvas-verso"></canvas>
+          <figcaption>Verso</figcaption>
+        </figure>
+      </div>
+      <p class="mesa__legenda">
+        <span class="legenda legenda--dobra">Dobra</span>
+        <span class="legenda legenda--corte">Corte</span>
+        <span class="legenda legenda--espaco">Espaço central</span>
+      </p>
+      <dl class="resumo" id="resumo"></dl>
+      <div class="resultado" id="resultado" hidden></div>
+    </section>
+  </main>
+
+  <section class="sobre" id="como-funciona">
+    <h2>Como funciona</h2>
+    <p>Para encadernar um livro, as páginas não são impressas em sequência. Cada folha leva quatro páginas, duas de cada lado, e só ficam na ordem certa depois de dobradas e encaixadas umas dentro das outras. Esse arranjo se chama imposição, e é isso que o PDF Casado faz por você.</p>
+    <ol class="passos">
+      <li>Escolha o PDF do seu livro, zine ou caderno.</li>
+      <li>Defina o papel, o número de páginas por lado e o tamanho dos cadernos.</li>
+      <li>Ajuste o espaço central olhando o preview até as páginas ficarem onde você quer.</li>
+      <li>Gere o PDF e imprima. Antes de imprimir tudo, teste com uma folha.</li>
+      <li>Dobre cada folha ao meio, encaixe as folhas de cada caderno e costure ou grampeie.</li>
+    </ol>
+
+    <h2>Perguntas frequentes</h2>
+    <details>
+      <summary>Meu arquivo fica salvo em algum lugar?</summary>
+      <p>Não. Todo o processamento acontece no seu navegador. O PDF nunca sai do seu computador.</p>
+    </details>
+    <details>
+      <summary>Quantas folhas devo colocar em cada caderno?</summary>
+      <p>Para costura, 4 folhas (16 páginas) é o padrão. Papéis finos aceitam 5 ou 6 folhas; papéis grossos ficam melhores com 3. Cadernos grandes demais abrem mal e empurram as páginas do miolo para fora.</p>
+    </details>
+    <details>
+      <summary>Os versos saíram de cabeça para baixo. O que faço?</summary>
+      <p>Marque "Girar o verso em 180°" ou mude a opção da impressora entre virar pela borda longa e pela borda curta. O resumo ao lado do preview indica qual borda usar.</p>
+    </details>
+    <details>
+      <summary>Para que serve o espaço central?</summary>
+      <p>Ele define a distância entre as duas páginas de cada dupla. Aumente para ganhar margem perto da costura, principalmente em livros grossos, onde o miolo "engole" parte do texto.</p>
+    </details>
+    <details>
+      <summary>E se o número de páginas não fechar com os cadernos?</summary>
+      <p>As folhas são distribuídas entre os cadernos o mais igualmente possível, e as páginas em branco necessárias vão para o final do livro.</p>
+    </details>
+    <details>
+      <summary>Como funciona com mais de uma dupla por lado?</summary>
+      <p>Imprima tudo, corte a pilha nas linhas de corte e coloque as pilhas em ordem: a pilha 1 contém o começo do livro. Use o modo de conferência na primeira vez para ver a numeração.</p>
+    </details>
+    <details>
+      <summary>Funciona sem internet?</summary>
+      <p>Depois que a página carregou, sim.</p>
+    </details>
+  </section>
+
+  <footer class="rodape">
+    <p>PDF Casado. Seus arquivos não saem do seu computador.</p>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

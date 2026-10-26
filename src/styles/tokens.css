@@ -1,0 +1,46 @@
+/* Tokens de design. Todas as cores, fontes e medidas saem daqui. */
+
+:root {
+  /* Cores base */
+  --cor-fundo: #f4f6f5;
+  --cor-superficie: #ffffff;
+  --cor-tinta: #1c2422;
+  --cor-tinta-suave: #56635f;
+  --cor-borda: #c9d1ce;
+
+  /* Mesa de corte (área do preview) */
+  --cor-mesa: #2e5e4e;
+  --cor-mesa-escura: #1f4a3e;
+  --cor-mesa-linha: rgba(255, 255, 255, 0.07);
+  --cor-mesa-linha-forte: rgba(255, 255, 255, 0.14);
+  --cor-mesa-texto: #e6efe9;
+
+  /* Marcas de gráfica, iguais às do preview */
+  --cor-dobra: #d1236f;
+  --cor-corte: #0091c7;
+  --cor-aviso: #8a4b00;
+  --cor-aviso-fundo: #fff2d6;
+  --cor-erro: #a3133f;
+
+  /* Tipografia */
+  --fonte-titulo: "Young Serif", Georgia, serif;
+  --fonte-texto: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --texto-p: 0.875rem;
+  --texto-m: 1rem;
+  --texto-g: 1.25rem;
+  --texto-gg: 1.75rem;
+  --texto-ggg: 2.25rem;
+
+  /* Espaçamento */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+  --esp-7: 48px;
+
+  --raio: 4px;
+  --painel-largura: 380px;
+  --sombra-papel: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px rgba(0, 0, 0, 0.28);
+}
